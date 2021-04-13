@@ -1,0 +1,29 @@
+version: '3.0'
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - "DB_URL=postgresql://comments:comment_pw@postgres/comments"
+      - "DEBUG=false"
+    depends_on:
+      - postgres
+    links:
+      - "postgres:postgres"
+    restart: always
+    ports:
+      - "5000:5000"
+
+  postgres:
+    image: postgres:12
+    volumes:
+      - ptctrl_pg_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_PASSWORD=comment_pw"
+      - "POSTGRES_USER=comments"
+      - "POSTGRES_DB=comments"
+    restart: always
+
+volumes:
+  ptctrl_pg_data: {}
